@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateFolderInput {
-    private int id;           // L'ID du dossier à modifier
-    private String name;      // Le nouveau nom
+    private int id;
+    private String name;
     private Integer parentId; // Le nouveau parent (null = racine)
 }

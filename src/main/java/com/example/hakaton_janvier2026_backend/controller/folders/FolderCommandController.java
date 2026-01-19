@@ -37,7 +37,6 @@ public class FolderCommandController {
     }
 
     // PUT (Update: Renommer / Déplacer)
-    // URL: PUT http://localhost:8080/api/folders/12
     @PutMapping("/{id}")
     public ResponseEntity<UpdateFolderOutput> updateFolder(@PathVariable int id, @RequestBody UpdateFolderInput input) {
         // On s'assure que l'ID du path est bien dans l'input

@@ -17,7 +17,7 @@ public class FolderCommandProcessor {
 
     private final CreateFolderHandler createFolderHandler;
     private final DeleteFolderHandler deleteFolderHandler;
-    private final UpdateFolderHandler updateFolderHandler; // <--- Nouveau
+    private final UpdateFolderHandler updateFolderHandler;
 
     public FolderCommandProcessor(CreateFolderHandler createFolderHandler,
                                   DeleteFolderHandler deleteFolderHandler,
@@ -35,7 +35,6 @@ public class FolderCommandProcessor {
         return deleteFolderHandler.handle(input);
     }
 
-    // UPDATE (Nouvelle méthode)
     public UpdateFolderOutput process(UpdateFolderInput input) {
         return updateFolderHandler.handle(input);
     }
