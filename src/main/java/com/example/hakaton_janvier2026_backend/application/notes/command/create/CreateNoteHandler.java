@@ -44,8 +44,11 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
         dbNote.owner = userRepository.findById(input.owner_id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (input.folder_id != null) {
-            dbNote.folder = folderRepository.findById(input.folder_id).orElse(null);
+        if (input.folder_id != null && input.folder_id != 0) {
+            dbNote.folder = folderRepository.findById(input.folder_id)
+                    .orElseThrow(() -> new RuntimeException("Dossier parent introuvable"));
+        } else {
+            dbNote.folder = null; // Note à la racine
         }
 
         // Sauvegarde
