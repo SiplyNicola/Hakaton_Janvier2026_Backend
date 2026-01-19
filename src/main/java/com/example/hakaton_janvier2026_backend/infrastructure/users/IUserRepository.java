@@ -9,4 +9,6 @@ import java.util.List;
 public interface IUserRepository extends CrudRepository<DbUser,Integer> {
     boolean existsByUsername(String username);
     DbUser getByUsername(String username);
+
+    DbUser getById(int id);
 }

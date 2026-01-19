@@ -9,20 +9,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserCreateHandle implements ICommandHandler<UserCreateInput, UserCreateOutput> {
+public class CreateUserHandler implements ICommandHandler<CreateUserInput, CreateUserOutput> {
     private final IUserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserCreateHandle(IUserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public CreateUserHandler(IUserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserCreateOutput handle(UserCreateInput input) {
-        UserCreateOutput output = new UserCreateOutput();
+    public CreateUserOutput handle(CreateUserInput input) {
+        CreateUserOutput output = new CreateUserOutput();
 
         // Verify if the username is already used in the database
         if(userRepository.existsByUsername(input.username)) throw new UserAlreadyExistsException(input.username);

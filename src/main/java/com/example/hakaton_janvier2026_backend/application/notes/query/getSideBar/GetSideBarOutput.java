@@ -16,5 +16,6 @@ public class GetSideBarOutput {
     public static class NoteNode {
         public int id;
         public String title;
+        public String content_markdown;
     }
 }

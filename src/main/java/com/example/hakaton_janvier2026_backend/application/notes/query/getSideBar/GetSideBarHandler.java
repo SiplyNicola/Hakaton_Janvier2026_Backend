@@ -1,5 +1,7 @@
 package com.example.hakaton_janvier2026_backend.application.notes.query.getSideBar;
 
+import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
+import com.example.hakaton_janvier2026_backend.application.utils.IQueryHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.DbFolder;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.DbNote;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class GetSideBarHandler {
+public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSideBarOutput> {
 
     private final IFolderRepository folderRepository;
     private final INoteRepository noteRepository;
@@ -43,6 +45,7 @@ public class GetSideBarHandler {
                 GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
                 noteNode.id = dbNote.id;
                 noteNode.title = dbNote.title;
+                noteNode.content_markdown = dbNote.content_markdown;
 
                 folderMap.get(dbNote.folder.id).notes.add(noteNode);
             }
