@@ -21,7 +21,7 @@ public class NoteQueryController {
         this.noteQueryProcessor = noteQueryProcessor;
     }
 
-    @Operation(summary = "List all notes and folders")
+    @Operation(summary = "Return all folders and notes using the id of user")
     @ApiResponse(responseCode = "200")
     @GetMapping("/sidebar/{userId}")
     public ResponseEntity<GetSideBarOutput> getSidebar(@PathVariable int userId) {

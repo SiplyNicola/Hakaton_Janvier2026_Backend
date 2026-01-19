@@ -6,6 +6,7 @@ import com.example.hakaton_janvier2026_backend.application.notes.command.create.
 import com.example.hakaton_janvier2026_backend.application.notes.command.delete.DeleteNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteOutput;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +30,7 @@ public class NoteCommandController {
         this.noteCommandProcessor = noteCommandProcessor;
     }
 
+    @Operation(summary = "Create a note and assocate to a folder")
     @PostMapping()
     public ResponseEntity<CreateNoteOutput> addItem(@Valid @RequestBody CreateNoteInput createNoteInput) {
         CreateNoteOutput createNoteOutput = this.noteCommandProcessor.createNoteHandler.handle(createNoteInput);
@@ -41,6 +43,7 @@ public class NoteCommandController {
         return ResponseEntity.created(location).body(createNoteOutput);
     }
 
+    @Operation(summary = "Update a note (title/content/folder)")
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoteOutput> updateItem(
             @PathVariable int id,
@@ -58,6 +61,7 @@ public class NoteCommandController {
         return ResponseEntity.ok(updateNoteOutput);
     }
 
+    @Operation(summary = "Delete a note")
     @ApiResponses({
             @ApiResponse(responseCode = "204", content = @Content),
             @ApiResponse(
