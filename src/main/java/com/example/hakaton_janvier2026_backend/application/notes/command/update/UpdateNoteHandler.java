@@ -1,5 +1,6 @@
 package com.example.hakaton_janvier2026_backend.application.notes.command.update;
 
+import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.DbNote;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.INoteRepository;
@@ -10,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
 @Service
-public class UpdateNoteHandler {
+public class UpdateNoteHandler implements ICommandHandler<UpdateNoteInput, UpdateNoteOutput> {
 
     private final INoteRepository noteRepository;
     private final IFolderRepository folderRepository;
