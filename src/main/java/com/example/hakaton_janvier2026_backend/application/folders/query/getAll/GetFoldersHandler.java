@@ -1,4 +1,4 @@
-package com.example.hakaton_janvier2026_backend.application.folders.query.getall;
+package com.example.hakaton_janvier2026_backend.application.folders.query.getAll;
 
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.DbFolder;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;

@@ -1,10 +1,10 @@
 package com.example.hakaton_janvier2026_backend.controller.users;
 
 import com.example.hakaton_janvier2026_backend.application.users.command.UserCommandProcessor;
-import com.example.hakaton_janvier2026_backend.application.users.command.create.UserCreateInput;
-import com.example.hakaton_janvier2026_backend.application.users.command.create.UserCreateOutput;
-import com.example.hakaton_janvier2026_backend.application.users.command.login.UserLoginInput;
-import com.example.hakaton_janvier2026_backend.application.users.command.login.UserLoginOutput;
+import com.example.hakaton_janvier2026_backend.application.users.command.create.CreateUserInput;
+import com.example.hakaton_janvier2026_backend.application.users.command.create.CreateUserOutput;
+import com.example.hakaton_janvier2026_backend.application.users.command.login.LoginUserInput;
+import com.example.hakaton_janvier2026_backend.application.users.command.login.LoginUserOutput;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,8 +36,8 @@ public class UserCommandController {
                     content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
             ),
     })
-    public ResponseEntity<UserCreateOutput> createUser(@RequestBody UserCreateInput userCreateInput) {
-        UserCreateOutput output = userCommandProcessor.userCreateHandle.handle(userCreateInput);
+    public ResponseEntity<CreateUserOutput> createUser(@RequestBody CreateUserInput createUserInput) {
+        CreateUserOutput output = userCommandProcessor.createUserHandler.handle(createUserInput);
 
         // Construction de l'URI de la nouvelle ressource (bonne pratique multi-tiers)
         URI location = ServletUriComponentsBuilder
@@ -63,8 +63,8 @@ public class UserCommandController {
                     content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
             )
     })
-    public ResponseEntity<UserLoginOutput> login(@RequestBody UserLoginInput userLoginInput) {
-        UserLoginOutput output = userCommandProcessor.userLoginHandle.handle(userLoginInput);
+    public ResponseEntity<LoginUserOutput> login(@RequestBody LoginUserInput loginUserInput) {
+        LoginUserOutput output = userCommandProcessor.loginUserHandler.handle(loginUserInput);
 
         return ResponseEntity.ok(output);
     }

@@ -1,8 +1,8 @@
-package com.example.hakaton_janvier2026_backend.application.users.command.create;
+package com.example.hakaton_janvier2026_backend.application.users.command.login;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class UserCreateInput {
+public class LoginUserInput {
     @NotBlank
     public String username;
     @NotBlank

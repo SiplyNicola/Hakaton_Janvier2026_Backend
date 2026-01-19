@@ -1,8 +1,8 @@
 package com.example.hakaton_janvier2026_backend.controller.folders;
 
 import com.example.hakaton_janvier2026_backend.application.folders.query.FolderQueryProcessor;
-import com.example.hakaton_janvier2026_backend.application.folders.query.getall.FolderTreeOutput;
-import com.example.hakaton_janvier2026_backend.application.folders.query.getall.GetFoldersInput;
+import com.example.hakaton_janvier2026_backend.application.folders.query.getAll.FolderTreeOutput;
+import com.example.hakaton_janvier2026_backend.application.folders.query.getAll.GetFoldersInput;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

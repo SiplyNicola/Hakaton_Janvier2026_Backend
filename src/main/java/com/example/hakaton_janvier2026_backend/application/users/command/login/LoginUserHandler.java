@@ -10,20 +10,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserLoginHandle implements ICommandHandler<UserLoginInput, UserLoginOutput> {
+public class LoginUserHandler implements ICommandHandler<LoginUserInput, LoginUserOutput> {
     private final IUserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserLoginHandle(IUserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public LoginUserHandler(IUserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserLoginOutput handle(UserLoginInput input) {
-        UserLoginOutput output = new UserLoginOutput();
+    public LoginUserOutput handle(LoginUserInput input) {
+        LoginUserOutput output = new LoginUserOutput();
 
         //Verify if the username is existing in the database
         if(!userRepository.existsByUsername(input.username)) throw new UserNotFoundException();
@@ -32,6 +32,6 @@ public class UserLoginHandle implements ICommandHandler<UserLoginInput, UserLogi
         //Verify if the password hash is the same in the database
         if(!passwordEncoder.matches(input.password, user.password)) throw new InvalidPasswordException();
 
-        return modelMapper.map(user, UserLoginOutput.class);
+        return modelMapper.map(user, LoginUserOutput.class);
     }
 }
