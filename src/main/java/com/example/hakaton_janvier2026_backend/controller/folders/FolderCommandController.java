@@ -7,6 +7,7 @@ import com.example.hakaton_janvier2026_backend.application.folders.command.delet
 import com.example.hakaton_janvier2026_backend.application.folders.command.delete.DeleteFolderOutput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderInput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderOutput;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class FolderCommandController {
     }
 
     // POST (Créer)
+    @Operation(summary = "Create a folder")
     @PostMapping
     public ResponseEntity<CreateFolderOutput> createFolder(@RequestBody CreateFolderInput input) {
         CreateFolderOutput output = folderCommandProcessor.process(input);
@@ -29,6 +31,7 @@ public class FolderCommandController {
     }
 
     // DELETE (Supprimer)
+    @Operation(summary = "Delete a folder")
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteFolderOutput> deleteFolder(@PathVariable int id) {
         DeleteFolderInput input = new DeleteFolderInput(id);
@@ -37,6 +40,7 @@ public class FolderCommandController {
     }
 
     // PUT (Update: Renommer / Déplacer)
+    @Operation(summary = "Update a folder (rename/move)")
     @PutMapping("/{id}")
     public ResponseEntity<UpdateFolderOutput> updateFolder(@PathVariable int id, @RequestBody UpdateFolderInput input) {
         // On s'assure que l'ID du path est bien dans l'input
