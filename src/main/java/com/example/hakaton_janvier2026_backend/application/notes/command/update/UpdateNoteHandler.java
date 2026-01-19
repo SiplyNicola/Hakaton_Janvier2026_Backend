@@ -45,9 +45,12 @@ public class UpdateNoteHandler implements ICommandHandler<UpdateNoteInput, Updat
         // Calcul des mots (séparation par espaces/tabulations) [cite: 70]
         dbNote.word_count = content.trim().isEmpty() ? 0 : content.trim().split("\\s+").length;
 
-        // 4. Mise à jour optionnelle du dossier
-        if (input.folder_id != null) {
-            dbNote.folder = folderRepository.findById(input.folder_id).orElse(null);
+        if (input.folder_id != null && input.folder_id > 0) {
+            dbNote.folder = folderRepository.findById(input.folder_id)
+                    .orElseThrow(() -> new RuntimeException("Dossier introuvable"));
+        } else if (input.folder_id == null || input.folder_id == 0) {
+            // Optionnel : ne rien faire pour garder l'ancien dossier,
+            // ou dbNote.folder = null; si tu veux vraiment déplacer à la racine.
         }
 
         // 5. Sauvegarde dans MySQL 8
