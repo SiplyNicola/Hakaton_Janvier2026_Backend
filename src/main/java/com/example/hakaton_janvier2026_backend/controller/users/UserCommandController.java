@@ -19,7 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/api")
 public class UserCommandController {
     private final UserCommandProcessor userCommandProcessor;
 
@@ -65,12 +65,6 @@ public class UserCommandController {
     })
     public ResponseEntity<UserLoginOutput> login(@RequestBody UserLoginInput userLoginInput) {
         UserLoginOutput output = userCommandProcessor.userLoginHandle.handle(userLoginInput);
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(output.id)
-                .toUri();
 
         return ResponseEntity.ok(output);
     }

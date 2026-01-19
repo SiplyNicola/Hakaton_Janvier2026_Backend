@@ -26,7 +26,7 @@ public class UserLoginHandle implements ICommandHandler<UserLoginInput, UserLogi
         UserLoginOutput output = new UserLoginOutput();
 
         //Verify if the username is existing in the database
-        if(!userRepository.existsByUsername(input.username)) throw new UserNotFoundException(input.username);
+        if(!userRepository.existsByUsername(input.username)) throw new UserNotFoundException();
         DbUser user = userRepository.getByUsername(input.username);
 
         //Verify if the password hash is the same in the database
