@@ -5,6 +5,7 @@ import com.example.hakaton_janvier2026_backend.application.users.command.create.
 import com.example.hakaton_janvier2026_backend.application.users.command.create.CreateUserOutput;
 import com.example.hakaton_janvier2026_backend.application.users.command.login.LoginUserInput;
 import com.example.hakaton_janvier2026_backend.application.users.command.login.LoginUserOutput;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +28,7 @@ public class UserCommandController {
         this.userCommandProcessor = userCommandProcessor;
     }
 
+    @Operation(summary = "Create an user")
     @PostMapping("/users")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "User created !", content = @Content),
@@ -49,6 +51,7 @@ public class UserCommandController {
         return ResponseEntity.created(location).body(output);
     }
 
+    @Operation(summary = "Log in with an username and password, return the id and the username from the users existing in the database")
     @PostMapping("/login")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User is logged in !", content = @Content),

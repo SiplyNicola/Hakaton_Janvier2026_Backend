@@ -2,6 +2,7 @@ package com.example.hakaton_janvier2026_backend.controller.users;
 
 import com.example.hakaton_janvier2026_backend.application.users.query.UserQueryProcessor;
 import com.example.hakaton_janvier2026_backend.application.users.query.getById.GetByIdUserOutput;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,6 +18,7 @@ public class UserQueryController {
         this.userQueryProcessor = userQueryProcessor;
     }
 
+    @Operation(summary = "Get an user from his ID")
     @GetMapping("/{id}")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User", content = @Content),
