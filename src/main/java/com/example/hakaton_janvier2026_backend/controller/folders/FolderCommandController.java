@@ -5,6 +5,8 @@ import com.example.hakaton_janvier2026_backend.application.folders.command.creat
 import com.example.hakaton_janvier2026_backend.application.folders.command.create.CreateFolderOutput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.delete.DeleteFolderInput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.delete.DeleteFolderOutput;
+import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderInput;
+import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +29,19 @@ public class FolderCommandController {
     }
 
     // DELETE (Supprimer)
-    // URL: DELETE http://localhost:8080/api/folders/12
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteFolderOutput> deleteFolder(@PathVariable int id) {
         DeleteFolderInput input = new DeleteFolderInput(id);
         DeleteFolderOutput output = folderCommandProcessor.process(input);
+        return new ResponseEntity<>(output, HttpStatus.OK);
+    }
 
-        // On renvoie 200 OK avec le corps de réponse
+    // PUT (Update: Renommer / Déplacer)
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateFolderOutput> updateFolder(@PathVariable int id, @RequestBody UpdateFolderInput input) {
+        // On s'assure que l'ID du path est bien dans l'input
+        input.setId(id);
+        UpdateFolderOutput output = folderCommandProcessor.process(input);
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
 }

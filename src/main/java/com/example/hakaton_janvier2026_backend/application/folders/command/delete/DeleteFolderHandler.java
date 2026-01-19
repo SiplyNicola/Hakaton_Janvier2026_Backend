@@ -15,7 +15,7 @@ public class DeleteFolderHandler {
 
     @Transactional
     public DeleteFolderOutput handle(DeleteFolderInput input) {
-        // 1. Vérifier si le dossier existe (Optionnel mais propre)
+        // 1. Vérifier si le dossier existe
         if (!folderRepository.existsById(input.getFolderId())) {
             throw new RuntimeException("Folder not found with ID: " + input.getFolderId());
         }

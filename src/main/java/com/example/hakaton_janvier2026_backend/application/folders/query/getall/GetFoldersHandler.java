@@ -19,15 +19,15 @@ public class GetFoldersHandler {
         this.folderRepository = folderRepository;
     }
 
-    @Transactional(readOnly = true) // Optimisation pour la lecture
+    @Transactional(readOnly = true) // lecture
     public List<FolderTreeOutput> handle(GetFoldersInput input) {
-        // 1. Récupérer TOUS les dossiers de l'utilisateur (Liste plate)
+        // Récupérer tous les dossiers de l'utilisateur
         List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.getOwnerId());
 
-        // 2. Préparer une Map pour retrouver facilement les dossiers par ID
+        // Préparer une Map pour retrouver facilement les dossiers par ID
         Map<Integer, FolderTreeOutput> folderMap = new HashMap<>();
 
-        // 3. Première passe : Créer les DTOs sans les lier
+        // Créer les DTOs sans les lier
         for (DbFolder dbFolder : allFolders) {
             FolderTreeOutput dto = FolderTreeOutput.builder()
                     .id(dbFolder.id)
@@ -38,15 +38,15 @@ public class GetFoldersHandler {
             folderMap.put(dbFolder.id, dto);
         }
 
-        // 4. Deuxième passe : Construire l'arbre
+        // Construire l'arbre
         List<FolderTreeOutput> rootFolders = new ArrayList<>();
 
         for (FolderTreeOutput dto : folderMap.values()) {
             if (dto.getParentId() == null) {
-                // C'est une racine -> On l'ajoute à la liste principale
+                // racine -> liste principale
                 rootFolders.add(dto);
             } else {
-                // C'est un enfant -> On l'ajoute à la liste de son parent
+                // enfant -> liste de son parent
                 FolderTreeOutput parent = folderMap.get(dto.getParentId());
                 if (parent != null) {
                     parent.getChildren().add(dto);
