@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 @Service
 public class CreateNoteHandler {
@@ -30,6 +31,7 @@ public class CreateNoteHandler {
         DbNote dbNote = new DbNote();
         dbNote.title = input.title;
         dbNote.content_markdown = input.content_markdown;
+        dbNote.created_at = LocalDateTime.now();
 
         //  Calcul des métadonnées (Palier Zombie)
         dbNote.char_count = input.content_markdown.length();

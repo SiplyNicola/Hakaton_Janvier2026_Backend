@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name= "Folders")
+@Table(name= "folders")
 public class DbFolder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
