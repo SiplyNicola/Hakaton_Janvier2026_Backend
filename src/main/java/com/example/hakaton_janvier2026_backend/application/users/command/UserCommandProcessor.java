@@ -1,16 +1,16 @@
 package com.example.hakaton_janvier2026_backend.application.users.command;
 
-import com.example.hakaton_janvier2026_backend.application.users.command.create.UserCreateHandle;
-import com.example.hakaton_janvier2026_backend.application.users.command.login.UserLoginHandle;
+import com.example.hakaton_janvier2026_backend.application.users.command.create.CreateUserHandler;
+import com.example.hakaton_janvier2026_backend.application.users.command.login.LoginUserHandler;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserCommandProcessor {
-    public final UserCreateHandle userCreateHandle;
-    public final UserLoginHandle userLoginHandle;
+    public final CreateUserHandler createUserHandler;
+    public final LoginUserHandler loginUserHandler;
 
-    public UserCommandProcessor(UserCreateHandle userCreateHandle,  UserLoginHandle userLoginHandle) {
-        this.userCreateHandle = userCreateHandle;
-        this.userLoginHandle = userLoginHandle;
+    public UserCommandProcessor(CreateUserHandler createUserHandler, LoginUserHandler loginUserHandler) {
+        this.createUserHandler = createUserHandler;
+        this.loginUserHandler = loginUserHandler;
     }
 }
