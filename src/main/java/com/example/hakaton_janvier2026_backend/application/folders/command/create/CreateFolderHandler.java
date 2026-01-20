@@ -22,7 +22,6 @@ public class CreateFolderHandler {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public CreateFolderOutput handle(CreateFolderInput input) {
         // 1. Validation / Récupération Owner
         DbUser owner = userRepository.findById(input.getOwnerId())

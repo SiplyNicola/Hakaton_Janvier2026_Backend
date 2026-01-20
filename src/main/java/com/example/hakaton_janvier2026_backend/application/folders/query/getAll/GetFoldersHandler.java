@@ -18,8 +18,7 @@ public class GetFoldersHandler {
     public GetFoldersHandler(IFolderRepository folderRepository) {
         this.folderRepository = folderRepository;
     }
-
-    @Transactional(readOnly = true) // lecture
+    
     public List<FolderTreeOutput> handle(GetFoldersInput input) {
         // Récupérer tous les dossiers de l'utilisateur
         List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.getOwnerId());

@@ -44,6 +44,14 @@ public class FolderCommandController {
 
     // DELETE (Supprimer)
     @Operation(summary = "Delete a folder")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Folder is deleted !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Folder is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteFolderOutput> deleteFolder(@PathVariable int id) {
         DeleteFolderInput input = new DeleteFolderInput(id);
