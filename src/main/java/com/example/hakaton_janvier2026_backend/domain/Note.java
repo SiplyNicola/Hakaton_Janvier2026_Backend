@@ -19,6 +19,7 @@ public class Note {
     //Data
     private String title;
     private String content_markdown;
+    private boolean isWriteMode;
 
     // Generated date by the database
     private LocalDateTime created_at;

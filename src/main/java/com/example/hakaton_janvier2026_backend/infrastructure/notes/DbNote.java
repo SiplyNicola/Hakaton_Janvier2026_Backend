@@ -29,6 +29,9 @@ public class DbNote {
     @Column(columnDefinition = "LONGTEXT") // Pour correspondre au SQL
     public String content_markdown;
 
+    @Column(name = "is_write_mode", columnDefinition = "BOOLEAN DEFAULT true")
+    public boolean isWriteMode = true;
+
     public LocalDateTime created_at;
     public LocalDateTime updated_at;
 

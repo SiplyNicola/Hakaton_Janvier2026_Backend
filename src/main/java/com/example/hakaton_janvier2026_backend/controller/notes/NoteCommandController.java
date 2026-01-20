@@ -4,6 +4,8 @@ import com.example.hakaton_janvier2026_backend.application.notes.command.NoteCom
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.delete.DeleteNoteInput;
+import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeInput;
+import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteOutput;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,6 +97,15 @@ public class NoteCommandController {
         catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @PatchMapping("/{id}/mode")
+    public ResponseEntity<SwitchNoteModeOutput> switchMode(@PathVariable int id, @RequestBody SwitchNoteModeInput input) {
+        input.id = id;
+
+        SwitchNoteModeOutput output = noteCommandProcessor.switchNoteModeHandler.handle(input);
+
+        return ResponseEntity.ok(output);
     }
 
 
