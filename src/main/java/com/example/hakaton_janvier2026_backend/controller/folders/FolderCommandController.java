@@ -53,6 +53,19 @@ public class FolderCommandController {
 
     // PUT (Update: Renommer / Déplacer)
     @Operation(summary = "Update a folder (rename/move)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Folder updated !",  content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Folder not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "A folder can not be his own parent folder !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @PutMapping("/{id}")
     public ResponseEntity<UpdateFolderOutput> updateFolder(@PathVariable int id, @RequestBody UpdateFolderInput input) {
         // On s'assure que l'ID du path est bien dans l'input
