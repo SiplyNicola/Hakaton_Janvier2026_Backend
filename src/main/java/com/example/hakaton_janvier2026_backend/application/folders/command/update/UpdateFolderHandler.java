@@ -16,7 +16,6 @@ public class UpdateFolderHandler {
         this.folderRepository = folderRepository;
     }
 
-    @Transactional
     public UpdateFolderOutput handle(UpdateFolderInput input) {
         // 1. Récupérer le dossier existant
         DbFolder folderToUpdate = folderRepository.findById(input.getId())
