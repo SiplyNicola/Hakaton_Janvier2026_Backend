@@ -31,6 +31,14 @@ public class NoteCommandController {
     }
 
     @Operation(summary = "Create a note and assocate to a folder")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Note is created !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Folders or User is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @PostMapping()
     public ResponseEntity<CreateNoteOutput> addItem(@Valid @RequestBody CreateNoteInput createNoteInput) {
         CreateNoteOutput createNoteOutput = this.noteCommandProcessor.createNoteHandler.handle(createNoteInput);

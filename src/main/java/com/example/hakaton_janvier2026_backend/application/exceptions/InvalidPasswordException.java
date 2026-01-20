@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 public class InvalidPasswordException extends RuntimeException {
     public InvalidPasswordException() {
-        super("The password you entered is incorrect.");
+        super("The password you entered is incorrect !");
     }
 }
