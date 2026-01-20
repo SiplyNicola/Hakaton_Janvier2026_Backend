@@ -11,4 +11,6 @@ import java.util.List;
 public interface INoteRepository extends CrudRepository<DbNote,Integer> {
     List<DbNote> findAllByOwnerId(int ownerId);
     void deleteByDeletedAtBefore(LocalDateTime date);
+    // Trouve toutes les notes contenues dans un dossier spécifique
+    List<DbNote> findAllByFolderId(int folderId);
 }

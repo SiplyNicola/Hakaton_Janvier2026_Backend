@@ -12,4 +12,7 @@ public interface IFolderRepository extends CrudRepository<DbFolder,Integer> {
     List<DbFolder> findAllByOwner_Id(int ownerId);
     void deleteByDeletedAtBefore(LocalDateTime date);
 
+    // Trouve tous les sous-dossiers d'un dossier parent
+    List<DbFolder> findAllByParentFolderId(int parentId);
+
 }
