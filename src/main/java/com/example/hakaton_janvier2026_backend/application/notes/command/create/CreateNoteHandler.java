@@ -1,5 +1,7 @@
 package com.example.hakaton_janvier2026_backend.application.notes.command.create;
 
+import com.example.hakaton_janvier2026_backend.application.exceptions.ParentFolderNotFoundException;
+import com.example.hakaton_janvier2026_backend.application.exceptions.UserNotFoundException;
 import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.DbNote;
@@ -30,7 +32,9 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
     public CreateNoteOutput handle(CreateNoteInput input) {
         //  Préparation de l'entité DB
         DbNote dbNote = new DbNote();
-        dbNote.title = input.title;
+        if(input.title != null && !input.title.isEmpty()) {
+            dbNote.title = input.title;
+        } else dbNote.title = "Untitled note";
         dbNote.content_markdown = input.content_markdown;
         dbNote.created_at = LocalDateTime.now();
 
@@ -42,11 +46,11 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
 
         //  Liaison des relations (Clés étrangères)
         dbNote.owner = userRepository.findById(input.owner_id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException());
 
         if (input.folder_id != null && input.folder_id != 0) {
             dbNote.folder = folderRepository.findById(input.folder_id)
-                    .orElseThrow(() -> new RuntimeException("Dossier parent introuvable"));
+                    .orElseThrow(() -> new ParentFolderNotFoundException());
         } else {
             dbNote.folder = null; // Note à la racine
         }
@@ -54,7 +58,12 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
         // Sauvegarde
         DbNote savedNote = noteRepository.save(dbNote);
 
-        return modelMapper.map(savedNote, CreateNoteOutput.class);
+        CreateNoteOutput output = modelMapper.map(savedNote, CreateNoteOutput.class);
+        output.owner_id = savedNote.owner.id;
+        if (savedNote.folder != null)
+            output.folder_id = savedNote.folder.id;
+
+        return output;
     }
 
 }

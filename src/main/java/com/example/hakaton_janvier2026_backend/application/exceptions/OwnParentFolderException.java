@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.CONFLICT)
-public class UserAlreadyExistsException extends RuntimeException {
-    public UserAlreadyExistsException(String username) {
-        super(String.format("User with username %s already exists !", username));
+public class OwnParentFolderException extends RuntimeException {
+    public OwnParentFolderException() {
+        super("A folder cannot be its own parent.");
     }
 }

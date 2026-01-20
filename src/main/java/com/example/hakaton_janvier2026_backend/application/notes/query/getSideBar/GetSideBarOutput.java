@@ -5,6 +5,7 @@ import java.util.List;
 
 public class GetSideBarOutput {
     public List<FolderNode> folders = new ArrayList<>();
+    public List<NoteNode> notes = new ArrayList<>();
 
     public static class FolderNode {
         public int id;

@@ -1,11 +1,13 @@
 package com.example.hakaton_janvier2026_backend.application.notes.query.getSideBar;
 
+import com.example.hakaton_janvier2026_backend.application.exceptions.UserNotFoundException;
 import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
 import com.example.hakaton_janvier2026_backend.application.utils.IQueryHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.DbFolder;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.DbNote;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.INoteRepository;
+import com.example.hakaton_janvier2026_backend.infrastructure.users.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,14 +19,17 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
     private final IFolderRepository folderRepository;
     private final INoteRepository noteRepository;
+    private final IUserRepository userRepository;
 
-    public GetSideBarHandler(IFolderRepository folderRepository, INoteRepository noteRepository) {
+    public GetSideBarHandler(IFolderRepository folderRepository, INoteRepository noteRepository, IUserRepository userRepository) {
         this.folderRepository = folderRepository;
         this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
     }
 
 
     public GetSideBarOutput handle(GetSideBarInput input) {
+        if(!userRepository.existsById(input.userId)) throw new UserNotFoundException();
         List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.userId);
         List<DbNote> allNotes = noteRepository.findAllByOwnerId(input.userId);
 
@@ -41,12 +46,14 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
         // 2. Distribution des notes DANS les dossiers uniquement
         for (DbNote dbNote : allNotes) {
-            if (dbNote.folder != null && folderMap.containsKey(dbNote.folder.id)) {
-                GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
-                noteNode.id = dbNote.id;
-                noteNode.title = dbNote.title;
-                noteNode.content_markdown = dbNote.content_markdown;
+            GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
+            noteNode.id = dbNote.id;
+            noteNode.title = dbNote.title;
+            noteNode.content_markdown = dbNote.content_markdown;
 
+            if(dbNote.folder == null) {
+                output.notes.add(noteNode);
+            } else {
                 folderMap.get(dbNote.folder.id).notes.add(noteNode);
             }
         }

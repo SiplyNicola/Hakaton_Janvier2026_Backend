@@ -14,12 +14,12 @@ public class DbNote {
     public int id;
 
     // Foreign Key: owner_id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
     public DbUser owner;
 
     // Foreign Key: folder_id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "folder_id") // Peut être NULL selon votre SQL
     public DbFolder folder;
 
@@ -28,6 +28,9 @@ public class DbNote {
 
     @Column(columnDefinition = "LONGTEXT") // Pour correspondre au SQL
     public String content_markdown;
+
+    @Column(name = "is_write_mode", columnDefinition = "BOOLEAN DEFAULT true")
+    public boolean isWriteMode = true;
 
     public LocalDateTime created_at;
     public LocalDateTime updated_at;

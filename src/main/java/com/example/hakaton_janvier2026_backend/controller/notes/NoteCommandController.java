@@ -4,6 +4,8 @@ import com.example.hakaton_janvier2026_backend.application.notes.command.NoteCom
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.delete.DeleteNoteInput;
+import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeInput;
+import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteOutput;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +33,14 @@ public class NoteCommandController {
     }
 
     @Operation(summary = "Create a note and assocate to a folder")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Note is created !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Folders or User is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @PostMapping()
     public ResponseEntity<CreateNoteOutput> addItem(@Valid @RequestBody CreateNoteInput createNoteInput) {
         CreateNoteOutput createNoteOutput = this.noteCommandProcessor.createNoteHandler.handle(createNoteInput);
@@ -44,6 +54,14 @@ public class NoteCommandController {
     }
 
     @Operation(summary = "Update a note (title/content/folder)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Note updated !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Note or parent folder not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoteOutput> updateItem(
             @PathVariable int id,
@@ -63,9 +81,10 @@ public class NoteCommandController {
 
     @Operation(summary = "Delete a note")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "204", description = "Note deleted !", content = @Content),
             @ApiResponse(
                     responseCode = "404",
+                    description = "Note is not found !",
                     content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
             )
     })
@@ -78,6 +97,24 @@ public class NoteCommandController {
         catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @Operation(summary = "Change note mode (Read/Write)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Note mode updated !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Note is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
+    @PatchMapping("/{id}/mode")
+    public ResponseEntity<SwitchNoteModeOutput> switchMode(@PathVariable int id, @RequestBody SwitchNoteModeInput input) {
+        input.id = id;
+
+        SwitchNoteModeOutput output = noteCommandProcessor.switchNoteModeHandler.handle(input);
+
+        return ResponseEntity.ok(output);
     }
 
 

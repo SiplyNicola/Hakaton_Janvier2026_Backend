@@ -1,5 +1,7 @@
 package com.example.hakaton_janvier2026_backend.application.folders.command.create;
 
+import com.example.hakaton_janvier2026_backend.application.exceptions.ParentFolderNotFoundException;
+import com.example.hakaton_janvier2026_backend.application.exceptions.UserNotFoundException;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.DbFolder;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.users.DbUser;
@@ -20,22 +22,25 @@ public class CreateFolderHandler {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public CreateFolderOutput handle(CreateFolderInput input) {
         // 1. Validation / Récupération Owner
         DbUser owner = userRepository.findById(input.getOwnerId())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + input.getOwnerId()));
+                .orElseThrow(() -> new UserNotFoundException());
 
         // 2. Récupération Parent (si existe)
         DbFolder parent = null;
         if (input.getParentId() != null && input.getParentId() != 0) {
             parent = folderRepository.findById(input.getParentId())
-                    .orElseThrow(() -> new RuntimeException("Parent folder not found"));
+                    .orElseThrow(() -> new ParentFolderNotFoundException());
         }
 
         // 3. Création Entité DB
         DbFolder dbFolder = new DbFolder();
-        dbFolder.name = input.getName();
+        if (input.getName() != null && !input.getName().isEmpty()) {
+            dbFolder.name = input.getName();
+        } else {
+            dbFolder.name = "Untitled Folder";
+        }
         dbFolder.owner = owner;
         dbFolder.parentFolder = parent;
         dbFolder.created_at = LocalDateTime.now(); // On force la date pour le retour immédiat

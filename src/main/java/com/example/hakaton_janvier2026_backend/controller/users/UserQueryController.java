@@ -21,7 +21,7 @@ public class UserQueryController {
     @Operation(summary = "Get an user from his ID")
     @GetMapping("/{id}")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "User", content = @Content),
+            @ApiResponse(responseCode = "200", description = "User with the request Id is return", content = @Content),
             @ApiResponse(
                     responseCode = "404",
                     description = "User is not found !",
