@@ -35,7 +35,11 @@ public class CreateFolderHandler {
 
         // 3. Création Entité DB
         DbFolder dbFolder = new DbFolder();
-        dbFolder.name = input.getName();
+        if (input.getName() != null && !input.getName().isEmpty()) {
+            dbFolder.name = input.getName();
+        } else {
+            dbFolder.name = "Dossier sans titre";
+        }
         dbFolder.owner = owner;
         dbFolder.parentFolder = parent;
         dbFolder.created_at = LocalDateTime.now(); // On force la date pour le retour immédiat
