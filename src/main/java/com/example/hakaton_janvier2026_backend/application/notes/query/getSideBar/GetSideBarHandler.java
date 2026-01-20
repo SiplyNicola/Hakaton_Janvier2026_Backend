@@ -46,12 +46,14 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
         // 2. Distribution des notes DANS les dossiers uniquement
         for (DbNote dbNote : allNotes) {
-            if (dbNote.folder != null && folderMap.containsKey(dbNote.folder.id)) {
-                GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
-                noteNode.id = dbNote.id;
-                noteNode.title = dbNote.title;
-                noteNode.content_markdown = dbNote.content_markdown;
+            GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
+            noteNode.id = dbNote.id;
+            noteNode.title = dbNote.title;
+            noteNode.content_markdown = dbNote.content_markdown;
 
+            if(dbNote.folder == null) {
+                output.notes.add(noteNode);
+            } else {
                 folderMap.get(dbNote.folder.id).notes.add(noteNode);
             }
         }
