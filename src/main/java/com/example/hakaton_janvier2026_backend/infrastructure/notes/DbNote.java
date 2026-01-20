@@ -31,6 +31,8 @@ public class DbNote {
 
     public LocalDateTime created_at;
     public LocalDateTime updated_at;
+    @Column(name = "deleted_at")
+    public LocalDateTime deletedAt;
 
     public long size_bytes;
     public int line_count;

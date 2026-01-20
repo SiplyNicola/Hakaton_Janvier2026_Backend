@@ -23,6 +23,7 @@ public class Note {
     // Generated date by the database
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private LocalDateTime deleted_at;
 
     //Meta Data
     private long size_bytes;

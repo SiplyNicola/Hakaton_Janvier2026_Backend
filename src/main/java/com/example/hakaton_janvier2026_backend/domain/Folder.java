@@ -18,4 +18,5 @@ public class Folder {
     //Data
     private String name;
     private LocalDateTime created_at;
+    private LocalDateTime deleted_at;
 }

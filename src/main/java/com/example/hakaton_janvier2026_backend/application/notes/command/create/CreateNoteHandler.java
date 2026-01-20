@@ -34,7 +34,7 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
         dbNote.content_markdown = input.content_markdown;
         dbNote.created_at = LocalDateTime.now();
 
-        //  Calcul des métadonnées (Palier Zombie)
+        //  Calcul des métadonnées
         dbNote.char_count = input.content_markdown.length();
         dbNote.word_count = input.content_markdown.split("\\s+").length;
         dbNote.line_count = input.content_markdown.split("\r\n|\r|\n").length;

@@ -15,6 +15,8 @@ public class DbFolder {
     //Data
     public String name;
     public LocalDateTime created_at;
+    @Column(name = "deleted_at")
+    public LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
