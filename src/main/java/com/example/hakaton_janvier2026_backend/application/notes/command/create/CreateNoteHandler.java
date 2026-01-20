@@ -32,7 +32,9 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
     public CreateNoteOutput handle(CreateNoteInput input) {
         //  Préparation de l'entité DB
         DbNote dbNote = new DbNote();
-        dbNote.title = input.title;
+        if(input.title != null && !input.title.isEmpty()) {
+            dbNote.title = input.title;
+        } else dbNote.title = "Untitled note";
         dbNote.content_markdown = input.content_markdown;
         dbNote.created_at = LocalDateTime.now();
 

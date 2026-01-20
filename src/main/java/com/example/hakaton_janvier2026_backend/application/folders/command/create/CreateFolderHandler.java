@@ -39,7 +39,7 @@ public class CreateFolderHandler {
         if (input.getName() != null && !input.getName().isEmpty()) {
             dbFolder.name = input.getName();
         } else {
-            dbFolder.name = "Dossier sans titre";
+            dbFolder.name = "Untitled Folder";
         }
         dbFolder.owner = owner;
         dbFolder.parentFolder = parent;
