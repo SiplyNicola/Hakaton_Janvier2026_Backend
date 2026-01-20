@@ -1,11 +1,13 @@
 package com.example.hakaton_janvier2026_backend.controller.notes;
 
+import com.example.hakaton_janvier2026_backend.application.folders.command.trashDeleteFolder.TrashDeleteFolderOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.NoteCommandProcessor;
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.delete.DeleteNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeOutput;
+import com.example.hakaton_janvier2026_backend.application.notes.command.trashDeleteNote.TrashDeleteNoteOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteOutput;
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,6 +117,23 @@ public class NoteCommandController {
         SwitchNoteModeOutput output = noteCommandProcessor.switchNoteModeHandler.handle(input);
 
         return ResponseEntity.ok(output);
+    }
+
+    @Operation(summary = "Update deleledAt")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Folder updated !",  content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Folder not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
+    @PutMapping("/trash/{id}")
+    public ResponseEntity<TrashDeleteNoteOutput> updateFolder(@PathVariable int id) {
+
+       TrashDeleteNoteOutput output = noteCommandProcessor.trashDeleteNoteHandler.handle(id);
+        return new ResponseEntity<>(output, HttpStatus.OK);
+
     }
 
 

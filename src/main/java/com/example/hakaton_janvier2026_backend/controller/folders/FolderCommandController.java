@@ -83,7 +83,7 @@ public class FolderCommandController {
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
-    @Operation(summary = "Update a folder (rename/move)")
+    @Operation(summary = "Update deleledAt")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Folder updated !",  content = @Content),
             @ApiResponse(
