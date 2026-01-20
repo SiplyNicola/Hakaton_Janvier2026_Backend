@@ -99,6 +99,15 @@ public class NoteCommandController {
         }
     }
 
+    @Operation(summary = "Change note mode (Read/Write)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Note mode updated !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Note is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @PatchMapping("/{id}/mode")
     public ResponseEntity<SwitchNoteModeOutput> switchMode(@PathVariable int id, @RequestBody SwitchNoteModeInput input) {
         input.id = id;
