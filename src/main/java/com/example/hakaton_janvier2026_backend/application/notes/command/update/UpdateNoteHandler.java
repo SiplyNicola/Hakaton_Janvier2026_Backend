@@ -1,5 +1,7 @@
 package com.example.hakaton_janvier2026_backend.application.notes.command.update;
 
+import com.example.hakaton_janvier2026_backend.application.exceptions.NoteNotFoundException;
+import com.example.hakaton_janvier2026_backend.application.exceptions.ParentFolderNotFoundException;
 import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.DbNote;
@@ -26,7 +28,7 @@ public class UpdateNoteHandler implements ICommandHandler<UpdateNoteInput, Updat
     public UpdateNoteOutput handle(UpdateNoteInput input) {
         // 1. Récupération de la note en base de données
         DbNote dbNote = noteRepository.findById(input.id)
-                .orElseThrow(() -> new RuntimeException("Note introuvable"));
+                .orElseThrow(() -> new NoteNotFoundException());
 
         // 2. Mise à jour du contenu
         dbNote.title = input.title;
@@ -47,7 +49,7 @@ public class UpdateNoteHandler implements ICommandHandler<UpdateNoteInput, Updat
 
         if (input.folder_id != null && input.folder_id > 0) {
             dbNote.folder = folderRepository.findById(input.folder_id)
-                    .orElseThrow(() -> new RuntimeException("Dossier introuvable"));
+                    .orElseThrow(() -> new ParentFolderNotFoundException());
         } else if (input.folder_id == null || input.folder_id == 0) {
             // Optionnel : ne rien faire pour garder l'ancien dossier,
             // ou dbNote.folder = null; si tu veux vraiment déplacer à la racine.

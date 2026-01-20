@@ -52,6 +52,14 @@ public class NoteCommandController {
     }
 
     @Operation(summary = "Update a note (title/content/folder)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Note updated !", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Note or parent folder not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @PutMapping("/{id}")
     public ResponseEntity<UpdateNoteOutput> updateItem(
             @PathVariable int id,
@@ -71,9 +79,10 @@ public class NoteCommandController {
 
     @Operation(summary = "Delete a note")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "204", description = "Note deleted !", content = @Content),
             @ApiResponse(
                     responseCode = "404",
+                    description = "Note is not found !",
                     content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
             )
     })
