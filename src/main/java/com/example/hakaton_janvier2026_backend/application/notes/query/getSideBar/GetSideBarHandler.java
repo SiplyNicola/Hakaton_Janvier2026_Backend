@@ -1,11 +1,13 @@
 package com.example.hakaton_janvier2026_backend.application.notes.query.getSideBar;
 
+import com.example.hakaton_janvier2026_backend.application.exceptions.UserNotFoundException;
 import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
 import com.example.hakaton_janvier2026_backend.application.utils.IQueryHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.DbFolder;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.DbNote;
 import com.example.hakaton_janvier2026_backend.infrastructure.notes.INoteRepository;
+import com.example.hakaton_janvier2026_backend.infrastructure.users.IUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,14 +19,17 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
     private final IFolderRepository folderRepository;
     private final INoteRepository noteRepository;
+    private final IUserRepository userRepository;
 
-    public GetSideBarHandler(IFolderRepository folderRepository, INoteRepository noteRepository) {
+    public GetSideBarHandler(IFolderRepository folderRepository, INoteRepository noteRepository, IUserRepository userRepository) {
         this.folderRepository = folderRepository;
         this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
     }
 
 
     public GetSideBarOutput handle(GetSideBarInput input) {
+        if(!userRepository.existsById(input.userId)) throw new UserNotFoundException();
         List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.userId);
         List<DbNote> allNotes = noteRepository.findAllByOwnerId(input.userId);
 

@@ -26,7 +26,14 @@ public class NoteQueryController {
     }
 
     @Operation(summary = "Return all folders and notes using the id of user")
-    @ApiResponse(responseCode = "200")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "All folders and notes is return", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User id is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
     @GetMapping("/sidebar/{userId}")
     public ResponseEntity<GetSideBarOutput> getSidebar(@PathVariable int userId) {
         GetSideBarInput input = new GetSideBarInput();
@@ -40,10 +47,10 @@ public class NoteQueryController {
 
     @Operation(summary = "Return the notes data")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Data notes is return", content = @Content),
             @ApiResponse(
                     responseCode = "404",
-                    description = "",
+                    description = "Note is not found !",
                     content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
             )
     })
