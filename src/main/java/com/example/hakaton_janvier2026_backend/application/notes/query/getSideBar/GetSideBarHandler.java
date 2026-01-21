@@ -46,27 +46,31 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
         // 2. Distribution des notes DANS les dossiers uniquement
         for (DbNote dbNote : allNotes) {
-            GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
-            noteNode.id = dbNote.id;
-            noteNode.title = dbNote.title;
-            noteNode.content_markdown = dbNote.content_markdown;
+            if(dbNote.deletedAt == null){
+                GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
+                noteNode.id = dbNote.id;
+                noteNode.title = dbNote.title;
+                noteNode.content_markdown = dbNote.content_markdown;
 
-            if(dbNote.folder == null) {
-                output.notes.add(noteNode);
-            } else {
-                folderMap.get(dbNote.folder.id).notes.add(noteNode);
+                if(dbNote.folder == null) {
+                    output.notes.add(noteNode);
+                } else {
+                    folderMap.get(dbNote.folder.id).notes.add(noteNode);
+                }
             }
         }
 
         // 3. Construction de l'arborescence récursive
         for (DbFolder dbFolder : allFolders) {
-            GetSideBarOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
-            if (dbFolder.parentFolder == null) {
-                // Dossier racine
-                output.folders.add(currentNode);
-            } else if (folderMap.containsKey(dbFolder.parentFolder.id)) {
-                // Emboîtement dans le dossier parent
-                folderMap.get(dbFolder.parentFolder.id).subFolders.add(currentNode);
+            if(dbFolder.deletedAt == null){
+                GetSideBarOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
+                if (dbFolder.parentFolder == null) {
+                    // Dossier racine
+                    output.folders.add(currentNode);
+                } else if (folderMap.containsKey(dbFolder.parentFolder.id)) {
+                    // Emboîtement dans le dossier parent
+                    folderMap.get(dbFolder.parentFolder.id).subFolders.add(currentNode);
+                }
             }
         }
 
