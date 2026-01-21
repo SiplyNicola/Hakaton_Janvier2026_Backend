@@ -4,6 +4,8 @@ import com.example.hakaton_janvier2026_backend.application.notes.command.create.
 import com.example.hakaton_janvier2026_backend.application.notes.command.delete.DeleteNoteHandler;
 import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeHandler;
 import com.example.hakaton_janvier2026_backend.application.notes.command.trashDeleteNote.TrashDeleteNoteHandler;
+import com.example.hakaton_janvier2026_backend.application.notes.command.trashRestoreNote.TrashRestoreNoteHandler;
+import com.example.hakaton_janvier2026_backend.application.notes.command.trashRestoreNote.TrashRestoreNoteOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteHandler;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,14 @@ public class NoteCommandProcessor {
     public final DeleteNoteHandler deleteNoteHandler;
     public final SwitchNoteModeHandler switchNoteModeHandler;
     public final TrashDeleteNoteHandler trashDeleteNoteHandler;
+    public final TrashRestoreNoteHandler trashRestoreNoteHandler;
 
-    public NoteCommandProcessor(CreateNoteHandler createNoteHandler, UpdateNoteHandler updateNoteHandler, DeleteNoteHandler deleteNoteHandler, SwitchNoteModeHandler switchNoteModeHandler, TrashDeleteNoteHandler trashDeleteNoteHandler) {
+    public NoteCommandProcessor(CreateNoteHandler createNoteHandler, UpdateNoteHandler updateNoteHandler, DeleteNoteHandler deleteNoteHandler, SwitchNoteModeHandler switchNoteModeHandler, TrashDeleteNoteHandler trashDeleteNoteHandler, TrashRestoreNoteHandler trashRestoreNoteHandler) {
         this.createNoteHandler = createNoteHandler;
         this.updateNoteHandler = updateNoteHandler;
         this.deleteNoteHandler = deleteNoteHandler;
         this.switchNoteModeHandler = switchNoteModeHandler;
         this.trashDeleteNoteHandler = trashDeleteNoteHandler;
-
+        this.trashRestoreNoteHandler = trashRestoreNoteHandler;
     }
 }

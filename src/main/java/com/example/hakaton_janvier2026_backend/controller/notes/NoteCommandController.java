@@ -1,6 +1,5 @@
 package com.example.hakaton_janvier2026_backend.controller.notes;
 
-import com.example.hakaton_janvier2026_backend.application.folders.command.trashDeleteFolder.TrashDeleteFolderOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.NoteCommandProcessor;
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.create.CreateNoteOutput;
@@ -8,6 +7,7 @@ import com.example.hakaton_janvier2026_backend.application.notes.command.delete.
 import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.switchmode.SwitchNoteModeOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.trashDeleteNote.TrashDeleteNoteOutput;
+import com.example.hakaton_janvier2026_backend.application.notes.command.trashRestoreNote.TrashRestoreNoteOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteInput;
 import com.example.hakaton_janvier2026_backend.application.notes.command.update.UpdateNoteOutput;
 import io.swagger.v3.oas.annotations.Operation;
@@ -134,6 +134,21 @@ public class NoteCommandController {
        TrashDeleteNoteOutput output = noteCommandProcessor.trashDeleteNoteHandler.handle(id);
         return new ResponseEntity<>(output, HttpStatus.OK);
 
+    }
+
+    @Operation(summary = "Restore a note")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Folder restored !",  content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Folder not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<TrashRestoreNoteOutput> restoreFolder(@PathVariable int id) {
+        TrashRestoreNoteOutput output = noteCommandProcessor.trashRestoreNoteHandler.handle(id);
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
 

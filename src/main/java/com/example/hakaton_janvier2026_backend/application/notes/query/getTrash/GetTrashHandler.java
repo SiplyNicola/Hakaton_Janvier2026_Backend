@@ -38,13 +38,11 @@ public class GetTrashHandler {
 
         // 1. Initialisation de la map des dossiers
         for (DbFolder dbFolder : allFolders) {
-            if (dbFolder.deletedAt != null) {
                 GetTrashOutput.FolderNode node = new GetTrashOutput.FolderNode();
                 node.id = dbFolder.id;
                 node.name = dbFolder.name;
                 node.deletedAt = dbFolder.deletedAt;
                 folderMap.put(node.id, node);
-            }
         }
 
         // 2. Distribution des notes DANS les dossiers uniquement
@@ -66,14 +64,17 @@ public class GetTrashHandler {
 
 
         for (DbFolder dbFolder : allFolders) {
-            if(dbFolder.deletedAt != null) {
+            if (dbFolder.deletedAt != null) {
                 GetTrashOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
                 if (dbFolder.parentFolder == null) {
-                    // Dossier racine
+                    // Dossier racine supprimé
                     output.folders.add(currentNode);
                 } else if (folderMap.containsKey(dbFolder.parentFolder.id)) {
-                    // Emboîtement dans le dossier parent
+                    // Le parent est supprimé aussi → on l'imbrique
                     folderMap.get(dbFolder.parentFolder.id).subFolders.add(currentNode);
+                } else {
+                    // Le parent n'est PAS supprimé → on le met en racine de la poubelle
+                    output.folders.add(currentNode);
                 }
             }
         }
