@@ -4,6 +4,8 @@ import com.example.hakaton_janvier2026_backend.application.notes.query.NoteQuery
 import com.example.hakaton_janvier2026_backend.application.notes.query.getById.GetByIdOutput;
 import com.example.hakaton_janvier2026_backend.application.notes.query.getSideBar.GetSideBarInput;
 import com.example.hakaton_janvier2026_backend.application.notes.query.getSideBar.GetSideBarOutput;
+import com.example.hakaton_janvier2026_backend.application.notes.query.getTrash.GetTrashInput;
+import com.example.hakaton_janvier2026_backend.application.notes.query.getTrash.GetTrashOutput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -57,6 +59,26 @@ public class NoteQueryController {
     @GetMapping("/{id}")
     public ResponseEntity<GetByIdOutput> getNoteById(@PathVariable int id) {
         GetByIdOutput output = noteQueryProcessor.getByIdHandler.handle(id);
+        return ResponseEntity.ok(output);
+    }
+
+    @Operation(summary = "Return all folders and notes using the id of user")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "All folders and notes is return", content = @Content),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User id is not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
+    @GetMapping("/getTrash/{userId}")
+    public ResponseEntity<GetTrashOutput> getTrash(@PathVariable int userId) {
+        GetTrashInput input = new GetTrashInput();
+        input.userId = userId;
+
+        GetTrashOutput output = this.noteQueryProcessor.getTrashHandler.handle(input);
+
+
         return ResponseEntity.ok(output);
     }
 }
