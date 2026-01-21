@@ -6,6 +6,8 @@ import com.example.hakaton_janvier2026_backend.application.folders.command.creat
 import com.example.hakaton_janvier2026_backend.application.folders.command.delete.DeleteFolderInput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.delete.DeleteFolderOutput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.trashDeleteFolder.TrashDeleteFolderOutput;
+import com.example.hakaton_janvier2026_backend.application.folders.command.trashRestoreFolder.TrashRestoreFolderHandler;
+import com.example.hakaton_janvier2026_backend.application.folders.command.trashRestoreFolder.TrashRestoreFolderOutput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderInput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderOutput;
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,5 +100,19 @@ public class FolderCommandController {
         TrashDeleteFolderOutput output = this.folderCommandProcessor.trashDeleteFolderHandler.handle(id);
         return new ResponseEntity<>(output, HttpStatus.OK);
 
+    }
+
+    @Operation(summary = "Restore the folder trashed")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Restore all the folders and notes who was trashed !", content = @Content),
+            @ApiResponse(responseCode = "404",
+                    description = "Folder not found !",
+                    content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))
+            )
+    })
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<TrashRestoreFolderOutput> restoreFolderTrashed(@PathVariable int id) {
+        TrashRestoreFolderOutput output = this.folderCommandProcessor.trashRestoreFolderHandler.handle(id);
+        return new ResponseEntity<>(output, HttpStatus.OK);
     }
 }

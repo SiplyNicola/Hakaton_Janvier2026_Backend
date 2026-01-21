@@ -8,6 +8,7 @@ import com.example.hakaton_janvier2026_backend.application.folders.command.delet
 import com.example.hakaton_janvier2026_backend.application.folders.command.delete.DeleteFolderOutput;
 // Imports Update
 import com.example.hakaton_janvier2026_backend.application.folders.command.trashDeleteFolder.TrashDeleteFolderHandler;
+import com.example.hakaton_janvier2026_backend.application.folders.command.trashRestoreFolder.TrashRestoreFolderHandler;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderHandler;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderInput;
 import com.example.hakaton_janvier2026_backend.application.folders.command.update.UpdateFolderOutput;
@@ -20,14 +21,14 @@ public class FolderCommandProcessor {
     private final DeleteFolderHandler deleteFolderHandler;
     private final UpdateFolderHandler updateFolderHandler;
     public final TrashDeleteFolderHandler trashDeleteFolderHandler;
+    public final TrashRestoreFolderHandler trashRestoreFolderHandler;
 
-    public FolderCommandProcessor(CreateFolderHandler createFolderHandler,
-                                  DeleteFolderHandler deleteFolderHandler,
-                                  UpdateFolderHandler updateFolderHandler, TrashDeleteFolderHandler trashDeleteFolderHandler) {
+    public FolderCommandProcessor(CreateFolderHandler createFolderHandler, DeleteFolderHandler deleteFolderHandler, UpdateFolderHandler updateFolderHandler, TrashDeleteFolderHandler trashDeleteFolderHandler, TrashRestoreFolderHandler trashRestoreFolderHandler) {
         this.createFolderHandler = createFolderHandler;
         this.deleteFolderHandler = deleteFolderHandler;
         this.updateFolderHandler = updateFolderHandler;
         this.trashDeleteFolderHandler = trashDeleteFolderHandler;
+        this.trashRestoreFolderHandler = trashRestoreFolderHandler;
     }
 
     public CreateFolderOutput process(CreateFolderInput input) {

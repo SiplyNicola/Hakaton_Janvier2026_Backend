@@ -28,13 +28,15 @@ public class GetFoldersHandler {
 
         // Créer les DTOs sans les lier
         for (DbFolder dbFolder : allFolders) {
-            FolderTreeOutput dto = FolderTreeOutput.builder()
-                    .id(dbFolder.id)
-                    .name(dbFolder.name)
-                    .parentId(dbFolder.parentFolder != null ? dbFolder.parentFolder.id : null)
-                    .children(new ArrayList<>()) // Important : initialiser la liste vide
-                    .build();
-            folderMap.put(dbFolder.id, dto);
+            if(dbFolder.deletedAt == null){
+                FolderTreeOutput dto = FolderTreeOutput.builder()
+                        .id(dbFolder.id)
+                        .name(dbFolder.name)
+                        .parentId(dbFolder.parentFolder != null ? dbFolder.parentFolder.id : null)
+                        .children(new ArrayList<>()) // Important : initialiser la liste vide
+                        .build();
+                folderMap.put(dbFolder.id, dto);
+            }
         }
 
         // Construire l'arbre
