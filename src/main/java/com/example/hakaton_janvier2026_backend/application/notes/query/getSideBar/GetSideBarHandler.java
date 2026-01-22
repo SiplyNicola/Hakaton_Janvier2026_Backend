@@ -30,8 +30,14 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
     public GetSideBarOutput handle(GetSideBarInput input) {
         if(!userRepository.existsById(input.userId)) throw new UserNotFoundException();
-        List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.userId);
-        List<DbNote> allNotes = noteRepository.findAllByOwnerId(input.userId);
+        List<DbFolder> allFolders = folderRepository
+                .findAllByOwner_Id(input.userId)
+                .stream().filter(f -> f.deletedAt == null)
+                .toList();
+        List<DbNote> allNotes = noteRepository
+                .findAllByOwnerId(input.userId)
+                .stream().filter(n -> n.deletedAt == null)
+                .toList();
 
         GetSideBarOutput output = new GetSideBarOutput();
         Map<Integer, GetSideBarOutput.FolderNode> folderMap = new HashMap<>();
@@ -46,7 +52,7 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
         // 2. Distribution des notes DANS les dossiers uniquement
         for (DbNote dbNote : allNotes) {
-            if(dbNote.deletedAt == null){
+            //if(dbNote.deletedAt == null){
                 GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
                 noteNode.id = dbNote.id;
                 noteNode.title = dbNote.title;
@@ -54,15 +60,17 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
 
                 if(dbNote.folder == null) {
                     output.notes.add(noteNode);
-                } else {
+                } else if (folderMap.containsKey(dbNote.folder.id)) {
                     folderMap.get(dbNote.folder.id).notes.add(noteNode);
+                } else {
+                    output.notes.add(noteNode);
                 }
-            }
+            //}
         }
 
         // 3. Construction de l'arborescence récursive
         for (DbFolder dbFolder : allFolders) {
-            if(dbFolder.deletedAt == null){
+            //if(dbFolder.deletedAt == null){
                 GetSideBarOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
                 if (dbFolder.parentFolder == null) {
                     // Dossier racine
@@ -70,8 +78,10 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
                 } else if (folderMap.containsKey(dbFolder.parentFolder.id)) {
                     // Emboîtement dans le dossier parent
                     folderMap.get(dbFolder.parentFolder.id).subFolders.add(currentNode);
+                } else {
+                    output.folders.add(currentNode);
                 }
-            }
+            //}
         }
 
         return output;

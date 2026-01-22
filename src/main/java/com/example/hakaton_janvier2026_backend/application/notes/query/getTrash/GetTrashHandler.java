@@ -30,8 +30,14 @@ public class GetTrashHandler {
 
     public GetTrashOutput handle(GetTrashInput input) {
         if (!userRepository.existsById(input.userId)) throw new UserNotFoundException();
-        List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.userId);
-        List<DbNote> allNotes = noteRepository.findAllByOwnerId(input.userId);
+        List<DbFolder> allFolders = folderRepository
+                .findAllByOwner_Id(input.userId)
+                .stream().filter(f -> f.deletedAt != null)
+                .toList();
+        List<DbNote> allNotes = noteRepository
+                .findAllByOwnerId(input.userId)
+                .stream().filter(n -> n.deletedAt != null)
+                .toList();
 
         GetTrashOutput output = new GetTrashOutput();
         Map<Integer, GetTrashOutput.FolderNode> folderMap = new HashMap<>();
@@ -47,7 +53,7 @@ public class GetTrashHandler {
 
         // 2. Distribution des notes DANS les dossiers uniquement
         for (DbNote dbNote : allNotes) {
-            if (dbNote.deletedAt != null) {
+            //if (dbNote.deletedAt != null) {
                 GetTrashOutput.NoteNode noteNode = new GetTrashOutput.NoteNode();
                 noteNode.id = dbNote.id;
                 noteNode.title = dbNote.title;
@@ -56,15 +62,17 @@ public class GetTrashHandler {
 
                 if (dbNote.folder == null) {
                     output.notes.add(noteNode);
-                } else {
+                } else if (folderMap.containsKey(dbNote.folder.id)) {
                     folderMap.get(dbNote.folder.id).notes.add(noteNode);
+                } else {
+                    output.notes.add(noteNode);
                 }
-            }
+            //}
         }
 
 
         for (DbFolder dbFolder : allFolders) {
-            if (dbFolder.deletedAt != null) {
+            //if (dbFolder.deletedAt != null) {
                 GetTrashOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
                 if (dbFolder.parentFolder == null) {
                     // Dossier racine supprimé
@@ -76,7 +84,7 @@ public class GetTrashHandler {
                     // Le parent n'est PAS supprimé → on le met en racine de la poubelle
                     output.folders.add(currentNode);
                 }
-            }
+            //}
         }
 
         return output;
