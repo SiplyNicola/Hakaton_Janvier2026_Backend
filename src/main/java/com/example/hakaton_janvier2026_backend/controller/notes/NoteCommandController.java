@@ -34,6 +34,7 @@ public class NoteCommandController {
         this.noteCommandProcessor = noteCommandProcessor;
     }
 
+    // Create a note
     @Operation(summary = "Create a note and assocate to a folder")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Note is created !", content = @Content),
@@ -55,6 +56,7 @@ public class NoteCommandController {
         return ResponseEntity.created(location).body(createNoteOutput);
     }
 
+    // Update a note (title, content, or his folder parent)
     @Operation(summary = "Update a note (title/content/folder)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Note updated !", content = @Content),
@@ -69,18 +71,15 @@ public class NoteCommandController {
             @PathVariable int id,
             @Valid @RequestBody UpdateNoteInput updateNoteInput) {
 
-
         if (id != updateNoteInput.id) {
             return ResponseEntity.badRequest().build();
         }
 
-        // Appel du handler via le processor pour traiter la logique métier et les métadonnées
         UpdateNoteOutput updateNoteOutput = this.noteCommandProcessor.updateNoteHandler.handle(updateNoteInput);
-
-        // Retourne un code 200 OK avec l'objet contenant les métadonnées à jour
         return ResponseEntity.ok(updateNoteOutput);
     }
 
+    // Delete a note
     @Operation(summary = "Delete a note")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Note deleted !", content = @Content),
@@ -101,6 +100,7 @@ public class NoteCommandController {
         }
     }
 
+    // Change the note mode
     @Operation(summary = "Change note mode (Read/Write)")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Note mode updated !", content = @Content),
@@ -115,10 +115,10 @@ public class NoteCommandController {
         input.id = id;
 
         SwitchNoteModeOutput output = noteCommandProcessor.switchNoteModeHandler.handle(input);
-
         return ResponseEntity.ok(output);
     }
 
+    // Move the note into the bin
     @Operation(summary = "Update deleledAt")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Folder updated !",  content = @Content),
@@ -136,6 +136,7 @@ public class NoteCommandController {
 
     }
 
+    // Move the note from the bin into the active folders
     @Operation(summary = "Restore a note")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Folder restored !",  content = @Content),

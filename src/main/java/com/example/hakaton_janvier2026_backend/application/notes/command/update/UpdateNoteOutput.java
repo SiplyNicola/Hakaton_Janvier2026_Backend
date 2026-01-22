@@ -8,8 +8,4 @@ public class UpdateNoteOutput {
     public String content_markdown;
     public LocalDateTime created_at;
     public LocalDateTime updated_at;
-    public long size_bytes;
-    public int line_count;
-    public int word_count;
-    public int char_count;
 }

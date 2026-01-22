@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 public class CreateFolderInput {
     private String name;
     private int ownerId;
-    private Integer parentId; // Optionnel (null = racine)
+    private Integer parentId;
 }

@@ -8,6 +8,4 @@ public class CreateNoteOutput {
     public int folder_id;
     public String title;
     public String content_markdown;
-    public LocalDateTime created_at;
-    public long size_bytes;
 }

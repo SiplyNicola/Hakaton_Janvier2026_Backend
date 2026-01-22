@@ -23,22 +23,17 @@ public class DbNote {
     @JoinColumn(name = "folder_id") // Peut être NULL selon votre SQL
     public DbFolder folder;
 
+    // Data
     @Column(length = 150)
     public String title;
-
     @Column(columnDefinition = "LONGTEXT") // Pour correspondre au SQL
     public String content_markdown;
-
     @Column(name = "is_write_mode", columnDefinition = "BOOLEAN DEFAULT true")
     public boolean isWriteMode = true;
 
+    //Date
     public LocalDateTime created_at;
     public LocalDateTime updated_at;
     @Column(name = "deleted_at")
     public LocalDateTime deletedAt;
-
-    public long size_bytes;
-    public int line_count;
-    public int word_count;
-    public int char_count;
 }

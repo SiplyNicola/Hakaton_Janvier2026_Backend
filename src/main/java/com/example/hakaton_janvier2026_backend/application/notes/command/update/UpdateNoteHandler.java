@@ -1,3 +1,4 @@
+
 package com.example.hakaton_janvier2026_backend.application.notes.command.update;
 
 import com.example.hakaton_janvier2026_backend.application.exceptions.NoteNotFoundException;
@@ -26,39 +27,30 @@ public class UpdateNoteHandler implements ICommandHandler<UpdateNoteInput, Updat
     }
 
     public UpdateNoteOutput handle(UpdateNoteInput input) {
-        // 1. Récupération de la note en base de données
+        // Retrieve the note from the database
         DbNote dbNote = noteRepository.findById(input.id)
                 .orElseThrow(() -> new NoteNotFoundException());
 
-        // 2. Mise à jour du contenu
+        // Update the content
         dbNote.title = input.title;
         dbNote.content_markdown = input.content_markdown;
 
-        // 3. Calcul des métadonnées en temps réel (Palier Zombie)
+        // Real-time metadata computation (Zombie threshold)
         String content = (input.content_markdown != null) ? input.content_markdown : "";
 
         dbNote.updated_at = LocalDateTime.now();
-        dbNote.char_count = content.length();
-        dbNote.size_bytes = content.getBytes(StandardCharsets.UTF_8).length;
-
-        // Calcul des lignes
-        dbNote.line_count = content.isEmpty() ? 0 : content.split("\\r?\\n").length;
-
-        // Calcul des mots (séparation par espaces/tabulations) [cite: 70]
-        dbNote.word_count = content.trim().isEmpty() ? 0 : content.trim().split("\\s+").length;
 
         if (input.folder_id != null && input.folder_id > 0) {
             dbNote.folder = folderRepository.findById(input.folder_id)
                     .orElseThrow(() -> new ParentFolderNotFoundException());
         } else if (input.folder_id == null || input.folder_id == 0) {
-            // Optionnel : ne rien faire pour garder l'ancien dossier,
-            // ou dbNote.folder = null; si tu veux vraiment déplacer à la racine.
+            // Optional: do nothing to keep the previous folder,
+            // or dbNote.folder = null; if you want to move the note to the root.
         }
 
-        // 5. Sauvegarde dans MySQL 8
         DbNote saved = noteRepository.save(dbNote);
 
-        // 6. Mapping vers l'Output
+        // Map to output
         return modelMapper.map(saved, UpdateNoteOutput.class);
     }
 }

@@ -19,7 +19,8 @@ public class TrashCleanupService {
         this.folderRepository = folderRepository;
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // S'exécute chaque nuit à minuit
+    // Execute at 00:00 every day to check if something needs to be deleted
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void cleanOldSpells() {
         LocalDateTime limit = LocalDateTime.now().minusDays(30);

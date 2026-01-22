@@ -1,3 +1,4 @@
+
 package com.example.hakaton_janvier2026_backend.application.folders.command.update;
 
 import com.example.hakaton_janvier2026_backend.application.exceptions.OwnParentFolderException;
@@ -17,35 +18,33 @@ public class UpdateFolderHandler {
     }
 
     public UpdateFolderOutput handle(UpdateFolderInput input) {
-        // 1. Récupérer le dossier existant
-        DbFolder folderToUpdate = folderRepository.findById(input.getId())
-                .orElseThrow(() -> new ParentFolderNotFoundException());
 
-        // 2. Mise à jour du NOM
+        // Retrieve the existing folder
+        DbFolder folderToUpdate = folderRepository.findById(input.getId())
+                .orElseThrow(ParentFolderNotFoundException::new);
+
+        // Update the folder name
         if (input.getName() != null && !input.getName().isBlank()) {
             folderToUpdate.name = input.getName();
         }
 
-        // 3. Mise à jour du PARENT (Déplacement)
-        // On vérifie d'abord qu'on essaie pas de devenir son propre parent (Boucle infinie)
+        // Update the parent folder (move operation)
         if (input.getParentId() != null && input.getParentId() == input.getId()) {
             throw new OwnParentFolderException();
         }
 
         if (input.getParentId() == null || input.getParentId() == 0) {
-            // Déplacement vers la racine
+            // Move the folder to the root level
             folderToUpdate.parentFolder = null;
         } else {
-            // Déplacement vers un autre dossier
-            DbFolder newParent = folderRepository.findById(input.getParentId())
-                    .orElseThrow(() -> new ParentFolderNotFoundException());
+            // Move the folder to another parent folder
+            DbFolder newParent = folderRepository.findById(input.getParentId()).orElseThrow(ParentFolderNotFoundException::new);
             folderToUpdate.parentFolder = newParent;
         }
 
-        // 4. Sauvegarde
         DbFolder updatedFolder = folderRepository.save(folderToUpdate);
 
-        // 5. Output
+        // Build and return the output
         return UpdateFolderOutput.builder()
                 .id(updatedFolder.id)
                 .name(updatedFolder.name)

@@ -23,18 +23,17 @@ public class CreateFolderHandler {
     }
 
     public CreateFolderOutput handle(CreateFolderInput input) {
-        // 1. Validation / Récupération Owner
+        // Get the owner
         DbUser owner = userRepository.findById(input.getOwnerId())
                 .orElseThrow(() -> new UserNotFoundException());
 
-        // 2. Récupération Parent (si existe)
+        // Get the parent if he's existing
         DbFolder parent = null;
         if (input.getParentId() != null && input.getParentId() != 0) {
             parent = folderRepository.findById(input.getParentId())
                     .orElseThrow(() -> new ParentFolderNotFoundException());
         }
 
-        // 3. Création Entité DB
         DbFolder dbFolder = new DbFolder();
         if (input.getName() != null && !input.getName().isEmpty()) {
             dbFolder.name = input.getName();
@@ -45,10 +44,8 @@ public class CreateFolderHandler {
         dbFolder.parentFolder = parent;
         dbFolder.created_at = LocalDateTime.now(); // On force la date pour le retour immédiat
 
-        // 4. Sauvegarde
         DbFolder savedFolder = folderRepository.save(dbFolder);
 
-        // 5. Mapping vers Output
         return CreateFolderOutput.builder()
                 .id(savedFolder.id)
                 .name(savedFolder.name)

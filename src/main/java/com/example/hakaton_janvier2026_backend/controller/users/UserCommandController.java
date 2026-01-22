@@ -28,6 +28,7 @@ public class UserCommandController {
         this.userCommandProcessor = userCommandProcessor;
     }
 
+    // Create an user
     @Operation(summary = "Create an user")
     @PostMapping("/users")
     @ApiResponses({
@@ -41,7 +42,6 @@ public class UserCommandController {
     public ResponseEntity<CreateUserOutput> createUser(@RequestBody CreateUserInput createUserInput) {
         CreateUserOutput output = userCommandProcessor.createUserHandler.handle(createUserInput);
 
-        // Construction de l'URI de la nouvelle ressource (bonne pratique multi-tiers)
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -51,6 +51,7 @@ public class UserCommandController {
         return ResponseEntity.created(location).body(output);
     }
 
+    // Authenticates a user using a username and password.
     @Operation(summary = "Log in with an username and password, return the id and the username from the users existing in the database")
     @PostMapping("/login")
     @ApiResponses({

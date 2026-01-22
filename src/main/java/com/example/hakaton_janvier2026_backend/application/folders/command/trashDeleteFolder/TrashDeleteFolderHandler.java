@@ -17,44 +17,45 @@ import java.util.List;
 public class TrashDeleteFolderHandler implements ICommandHandler<Integer, TrashDeleteFolderOutput> {
 
     private final IFolderRepository folderRepository;
-    private final INoteRepository noteRepository; // Ajouté
+    private final INoteRepository noteRepository;
     private final ModelMapper modelMapper;
 
-    public TrashDeleteFolderHandler(IFolderRepository folderRepository,
-                                    INoteRepository noteRepository,
-                                    ModelMapper modelMapper) {
+    public TrashDeleteFolderHandler(IFolderRepository folderRepository, INoteRepository noteRepository, ModelMapper modelMapper) {
         this.folderRepository = folderRepository;
         this.noteRepository = noteRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    @Transactional // Crucial pour que toute la cascade réussisse ou échoue ensemble
+    @Transactional
     public TrashDeleteFolderOutput handle(Integer input) {
+
+        // Retrieve the folder to delete or throw an exception if it does not exist
         DbFolder folder = folderRepository.findById(input)
                 .orElseThrow(ParentFolderNotFoundException::new);
 
         LocalDateTime now = LocalDateTime.now();
 
-        // Lancer la récursion pour tout le contenu
+        // Start recursive trash deletion for the folder and all its contents
         trashRecursive(folder, now);
 
         return modelMapper.map(folder, TrashDeleteFolderOutput.class);
     }
 
     private void trashRecursive(DbFolder folder, LocalDateTime deletedAt) {
-        // 1. Marquer le dossier actuel comme supprimé
+
+        // Mark the current folder as deleted (move into the bin)
         folder.deletedAt = deletedAt;
         folderRepository.save(folder);
 
-        // 2. Marquer toutes les notes de ce dossier
+        // Mark all notes contained in this folder as deleted
         List<DbNote> notes = noteRepository.findAllByFolderId(folder.id);
         for (DbNote note : notes) {
             note.deletedAt = deletedAt;
             noteRepository.save(note);
         }
 
-        // 3. Traiter récursivement les sous-dossiers
+        // Recursively process and trash all subfolders
         List<DbFolder> subFolders = folderRepository.findAllByParentFolderId(folder.id);
         for (DbFolder subFolder : subFolders) {
             trashRecursive(subFolder, deletedAt);

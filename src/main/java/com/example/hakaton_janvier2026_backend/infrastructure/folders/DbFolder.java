@@ -18,11 +18,12 @@ public class DbFolder {
     @Column(name = "deleted_at")
     public LocalDateTime deletedAt;
 
+    // Foreign key: owner_id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
     public DbUser owner;
 
-    // Foreign Key: parent_id (Auto-référence)
+    // Foreign Key: parent_id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id")
     public DbFolder parentFolder;

@@ -1,9 +1,9 @@
+
 package com.example.hakaton_janvier2026_backend.application.folders.query.getAll;
 
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.DbFolder;
 import com.example.hakaton_janvier2026_backend.infrastructure.folders.IFolderRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,36 +19,38 @@ public class GetFoldersHandler {
         this.folderRepository = folderRepository;
     }
 
-    public List<FolderTreeOutput> handle(GetFoldersInput input) {
-        // Récupérer tous les dossiers de l'utilisateur
+    public List<GetFoldersOutput> handle(GetFoldersInput input) {
+
+        // Retrieve all folders belonging to the user
         List<DbFolder> allFolders = folderRepository.findAllByOwner_Id(input.getOwnerId());
 
-        // Préparer une Map pour retrouver facilement les dossiers par ID
-        Map<Integer, FolderTreeOutput> folderMap = new HashMap<>();
+        // Prepare a map to easily access folders by their ID
+        Map<Integer, GetFoldersOutput> folderMap = new HashMap<>();
 
-        // Créer les DTOs sans les lier
+        // Create folder DTOs without linking them yet
         for (DbFolder dbFolder : allFolders) {
-            if(dbFolder.deletedAt == null){
-                FolderTreeOutput dto = FolderTreeOutput.builder()
+            if (dbFolder.deletedAt == null) {
+                GetFoldersOutput dto = GetFoldersOutput.builder()
                         .id(dbFolder.id)
                         .name(dbFolder.name)
-                        .parentId(dbFolder.parentFolder != null ? dbFolder.parentFolder.id : null)
-                        .children(new ArrayList<>()) // Important : initialiser la liste vide
+                        .parentId(dbFolder.parentFolder != null
+                                ? dbFolder.parentFolder.id
+                                : null)
+                        .children(new ArrayList<>()) // Important: initialize an empty children list
                         .build();
                 folderMap.put(dbFolder.id, dto);
             }
         }
 
-        // Construire l'arbre
-        List<FolderTreeOutput> rootFolders = new ArrayList<>();
+        List<GetFoldersOutput> rootFolders = new ArrayList<>();
 
-        for (FolderTreeOutput dto : folderMap.values()) {
+        for (GetFoldersOutput dto : folderMap.values()) {
             if (dto.getParentId() == null) {
-                // racine -> liste principale
+                // Root folder → add to the main list
                 rootFolders.add(dto);
             } else {
-                // enfant -> liste de son parent
-                FolderTreeOutput parent = folderMap.get(dto.getParentId());
+                // Child folder → add to its parent's children list
+                GetFoldersOutput parent = folderMap.get(dto.getParentId());
                 if (parent != null) {
                     parent.getChildren().add(dto);
                 }

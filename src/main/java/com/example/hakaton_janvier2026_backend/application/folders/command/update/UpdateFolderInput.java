@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class UpdateFolderInput {
     private int id;
     private String name;
-    private Integer parentId; // Le nouveau parent (null = racine)
+    private Integer parentId;
 }

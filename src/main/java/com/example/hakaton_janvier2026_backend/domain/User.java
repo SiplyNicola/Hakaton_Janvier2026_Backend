@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 public class User {
     private int  id;
+
+    //Data
     private String username;
     private String password;
 }

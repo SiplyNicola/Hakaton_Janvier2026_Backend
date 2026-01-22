@@ -30,7 +30,7 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
 
 
     public CreateNoteOutput handle(CreateNoteInput input) {
-        //  Préparation de l'entité DB
+        // Prepare the database entity
         DbNote dbNote = new DbNote();
         if(input.title != null && !input.title.isEmpty()) {
             dbNote.title = input.title;
@@ -38,13 +38,7 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
         dbNote.content_markdown = input.content_markdown;
         dbNote.created_at = LocalDateTime.now();
 
-        //  Calcul des métadonnées
-        dbNote.char_count = input.content_markdown.length();
-        dbNote.word_count = input.content_markdown.split("\\s+").length;
-        dbNote.line_count = input.content_markdown.split("\r\n|\r|\n").length;
-        dbNote.size_bytes = input.content_markdown.getBytes(StandardCharsets.UTF_8).length;
-
-        //  Liaison des relations (Clés étrangères)
+        // Bind relationships (foreign keys)
         dbNote.owner = userRepository.findById(input.owner_id)
                 .orElseThrow(() -> new UserNotFoundException());
 
@@ -52,10 +46,10 @@ public class CreateNoteHandler implements ICommandHandler<CreateNoteInput, Creat
             dbNote.folder = folderRepository.findById(input.folder_id)
                     .orElseThrow(() -> new ParentFolderNotFoundException());
         } else {
-            dbNote.folder = null; // Note à la racine
+            dbNote.folder = null; // Note at the root level
         }
 
-        // Sauvegarde
+        // Save the note
         DbNote savedNote = noteRepository.save(dbNote);
 
         CreateNoteOutput output = modelMapper.map(savedNote, CreateNoteOutput.class);
