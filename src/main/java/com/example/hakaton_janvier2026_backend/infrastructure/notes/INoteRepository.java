@@ -13,4 +13,5 @@ public interface INoteRepository extends CrudRepository<DbNote,Integer> {
     void deleteByDeletedAtBefore(LocalDateTime date);
     // Trouve toutes les notes contenues dans un dossier spécifique
     List<DbNote> findAllByFolderId(int folderId);
+    List<DbNote> findAllByFolderIdAndDeletedAtIsNull(int folderId);
 }
