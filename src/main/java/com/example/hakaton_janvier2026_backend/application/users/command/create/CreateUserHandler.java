@@ -1,5 +1,7 @@
 package com.example.hakaton_janvier2026_backend.application.users.command.create;
 
+import com.example.hakaton_janvier2026_backend.application.exceptions.InvalidPasswordException;
+import com.example.hakaton_janvier2026_backend.application.exceptions.InvalidUsernameException;
 import com.example.hakaton_janvier2026_backend.application.exceptions.UserAlreadyExistsException;
 import com.example.hakaton_janvier2026_backend.application.utils.ICommandHandler;
 import com.example.hakaton_janvier2026_backend.infrastructure.users.DbUser;
@@ -26,6 +28,8 @@ public class CreateUserHandler implements ICommandHandler<CreateUserInput, Creat
 
         // Verify if the username is already used in the database
         if(userRepository.existsByUsername(input.username)) throw new UserAlreadyExistsException(input.username);
+        if(input.username.length() < 3) throw new InvalidUsernameException();
+        if(input.password.length() < 8) throw new InvalidPasswordException();
 
         input.password = passwordEncoder.encode(input.password);
         DbUser user = modelMapper.map(input, DbUser.class);
