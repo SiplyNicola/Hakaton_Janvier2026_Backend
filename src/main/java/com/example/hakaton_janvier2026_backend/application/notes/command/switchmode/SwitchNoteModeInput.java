@@ -6,5 +6,5 @@ public class SwitchNoteModeInput {
     public int id;
 
     @NotNull
-    public Boolean is_write_mode; // true = écriture, false = lecture
+    public Boolean is_write_mode;
 }

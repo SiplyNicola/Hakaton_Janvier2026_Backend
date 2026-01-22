@@ -25,10 +25,4 @@ public class Note {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private LocalDateTime deleted_at;
-
-    //Meta Data
-    private long size_bytes;
-    private int line_count;
-    private int word_count;
-    private int char_count;
 }

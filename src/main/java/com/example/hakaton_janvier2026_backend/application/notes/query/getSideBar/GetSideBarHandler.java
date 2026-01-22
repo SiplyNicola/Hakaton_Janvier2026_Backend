@@ -1,3 +1,4 @@
+
 package com.example.hakaton_janvier2026_backend.application.notes.query.getSideBar;
 
 import com.example.hakaton_janvier2026_backend.application.exceptions.UserNotFoundException;
@@ -42,7 +43,7 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
         GetSideBarOutput output = new GetSideBarOutput();
         Map<Integer, GetSideBarOutput.FolderNode> folderMap = new HashMap<>();
 
-        // 1. Initialisation de la map des dossiers
+        // Initialize the folder map
         for (DbFolder dbFolder : allFolders) {
             GetSideBarOutput.FolderNode node = new GetSideBarOutput.FolderNode();
             node.id = dbFolder.id;
@@ -50,37 +51,37 @@ public class GetSideBarHandler implements IQueryHandler<GetSideBarInput, GetSide
             folderMap.put(node.id, node);
         }
 
-        // 2. Distribution des notes DANS les dossiers uniquement
+        // Distribute notes INTO folders only
         for (DbNote dbNote : allNotes) {
             //if(dbNote.deletedAt == null){
-                GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
-                noteNode.id = dbNote.id;
-                noteNode.title = dbNote.title;
-                noteNode.content_markdown = dbNote.content_markdown;
+            GetSideBarOutput.NoteNode noteNode = new GetSideBarOutput.NoteNode();
+            noteNode.id = dbNote.id;
+            noteNode.title = dbNote.title;
+            noteNode.content_markdown = dbNote.content_markdown;
 
-                if(dbNote.folder == null) {
-                    output.notes.add(noteNode);
-                } else if (folderMap.containsKey(dbNote.folder.id)) {
-                    folderMap.get(dbNote.folder.id).notes.add(noteNode);
-                } else {
-                    output.notes.add(noteNode);
-                }
+            if(dbNote.folder == null) {
+                output.notes.add(noteNode);
+            } else if (folderMap.containsKey(dbNote.folder.id)) {
+                folderMap.get(dbNote.folder.id).notes.add(noteNode);
+            } else {
+                output.notes.add(noteNode);
+            }
             //}
         }
 
-        // 3. Construction de l'arborescence récursive
+        // Build the recursive tree structure
         for (DbFolder dbFolder : allFolders) {
             //if(dbFolder.deletedAt == null){
-                GetSideBarOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
-                if (dbFolder.parentFolder == null) {
-                    // Dossier racine
-                    output.folders.add(currentNode);
-                } else if (folderMap.containsKey(dbFolder.parentFolder.id)) {
-                    // Emboîtement dans le dossier parent
-                    folderMap.get(dbFolder.parentFolder.id).subFolders.add(currentNode);
-                } else {
-                    output.folders.add(currentNode);
-                }
+            GetSideBarOutput.FolderNode currentNode = folderMap.get(dbFolder.id);
+            if (dbFolder.parentFolder == null) {
+                // Root folder
+                output.folders.add(currentNode);
+            } else if (folderMap.containsKey(dbFolder.parentFolder.id)) {
+                // Nest inside the parent folder
+                folderMap.get(dbFolder.parentFolder.id).subFolders.add(currentNode);
+            } else {
+                output.folders.add(currentNode);
+            }
             //}
         }
 

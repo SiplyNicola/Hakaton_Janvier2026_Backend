@@ -29,7 +29,7 @@ public class FolderCommandController {
         this.folderCommandProcessor = folderCommandProcessor;
     }
 
-    // POST (Créer)
+    // Create a folder
     @Operation(summary = "Create a folder")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Folder is created !", content = @Content),
@@ -45,7 +45,7 @@ public class FolderCommandController {
         return new ResponseEntity<>(output, HttpStatus.CREATED);
     }
 
-    // DELETE (Supprimer)
+    // Delete a folder
     @Operation(summary = "Delete a folder")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Folder is deleted !", content = @Content),
@@ -62,8 +62,8 @@ public class FolderCommandController {
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
-    // PUT (Update: Renommer / Déplacer)
-    @Operation(summary = "Update a folder (rename/move)")
+    // Rename a folder
+    @Operation(summary = "Update a folder rename")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Folder updated !",  content = @Content),
             @ApiResponse(
@@ -79,12 +79,12 @@ public class FolderCommandController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<UpdateFolderOutput> updateFolder(@PathVariable int id, @RequestBody UpdateFolderInput input) {
-        // On s'assure que l'ID du path est bien dans l'input
         input.setId(id);
         UpdateFolderOutput output = folderCommandProcessor.process(input);
         return new ResponseEntity<>(output, HttpStatus.OK);
     }
 
+    // Move the folder to the bin
     @Operation(summary = "Update deleledAt")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Folder updated !",  content = @Content),
@@ -102,6 +102,7 @@ public class FolderCommandController {
 
     }
 
+    // Move the folder from the bin to active folders
     @Operation(summary = "Restore the folder trashed")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Restore all the folders and notes who was trashed !", content = @Content),

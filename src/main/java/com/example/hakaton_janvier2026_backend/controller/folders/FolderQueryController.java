@@ -1,7 +1,7 @@
 package com.example.hakaton_janvier2026_backend.controller.folders;
 
 import com.example.hakaton_janvier2026_backend.application.folders.query.FolderQueryProcessor;
-import com.example.hakaton_janvier2026_backend.application.folders.query.getAll.FolderTreeOutput;
+import com.example.hakaton_janvier2026_backend.application.folders.query.getAll.GetFoldersOutput;
 import com.example.hakaton_janvier2026_backend.application.folders.query.getAll.GetFoldersInput;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +19,12 @@ public class FolderQueryController {
         this.folderQueryProcessor = folderQueryProcessor;
     }
 
-    // GET folder
+    // Get all folders
     @Operation(summary = "Get all folders (tree)")
     @GetMapping
-    public ResponseEntity<List<FolderTreeOutput>> getAllFolders(@RequestParam int ownerId) {
+    public ResponseEntity<List<GetFoldersOutput>> getAllFolders(@RequestParam int ownerId) {
         GetFoldersInput input = new GetFoldersInput(ownerId);
-        List<FolderTreeOutput> tree = folderQueryProcessor.process(input);
+        List<GetFoldersOutput> tree = folderQueryProcessor.process(input);
         return ResponseEntity.ok(tree);
     }
 }

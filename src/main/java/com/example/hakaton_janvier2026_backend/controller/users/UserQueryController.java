@@ -18,7 +18,8 @@ public class UserQueryController {
         this.userQueryProcessor = userQueryProcessor;
     }
 
-    @Operation(summary = "Get an user from his ID")
+    // Get an user by its Id
+    @Operation(summary = "Get an user by its Id")
     @GetMapping("/{id}")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User with the request Id is return", content = @Content),

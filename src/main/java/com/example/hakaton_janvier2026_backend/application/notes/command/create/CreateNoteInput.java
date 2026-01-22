@@ -10,7 +10,7 @@ public class CreateNoteInput {
     public String content_markdown;
 
     @NotNull(message = "L'ID du propriétaire est obligatoire")
-    public Integer owner_id; // Changé de int à Integer pour la validation
+    public Integer owner_id;
 
     public Integer folder_id;
 }

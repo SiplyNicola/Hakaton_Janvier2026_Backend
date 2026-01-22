@@ -27,6 +27,7 @@ public class NoteQueryController {
         this.noteQueryProcessor = noteQueryProcessor;
     }
 
+    // Get all folders and their children (folders and notes) from an id
     @Operation(summary = "Return all folders and notes using the id of user")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "All folders and notes is return", content = @Content),
@@ -47,6 +48,7 @@ public class NoteQueryController {
         return ResponseEntity.ok(output);
     }
 
+    // Get a note by its ID
     @Operation(summary = "Return the notes data")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Data notes is return", content = @Content),
@@ -62,7 +64,8 @@ public class NoteQueryController {
         return ResponseEntity.ok(output);
     }
 
-    @Operation(summary = "Return all folders and notes using the id of user")
+    // Get all folders and notes who was trashed
+    @Operation(summary = "Return all folders and notes trashed using the id of user")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "All folders and notes is return", content = @Content),
             @ApiResponse(

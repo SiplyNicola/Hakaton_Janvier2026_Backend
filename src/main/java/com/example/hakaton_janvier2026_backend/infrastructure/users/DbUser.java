@@ -9,6 +9,7 @@ public class DbUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int id;
 
+    //Data
     public String username;
     public String password;
 }

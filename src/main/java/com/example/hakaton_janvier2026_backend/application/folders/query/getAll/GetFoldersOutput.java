@@ -6,11 +6,10 @@ import java.util.List;
 
 @Data
 @Builder
-public class FolderTreeOutput {
+public class GetFoldersOutput {
     private int id;
     private String name;
     private Integer parentId;
 
-    // La liste des sous-dossiers (enfants)
-    private List<FolderTreeOutput> children;
+    private List<GetFoldersOutput> children;
 }
